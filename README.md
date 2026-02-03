@@ -40,30 +40,138 @@ Use the trained model to predict  for a new input value .
 
 ## PROGRAM
 
-### Name:
+### Name: Divya Sri V
 
-### Register Number:
+### Register Number:212224230070
+```
+import torch
+import torch.nn as nn  # Neural network module
+import matplotlib.pyplot as plt  # For plotting
 
-```python
+#  Generate Input Data (X) and Output Data (y)
+torch.manual_seed(71)  # For reproducibility
+X = torch.linspace(0, 10, 50).reshape(-1, 1)
+noise = torch.randn(X.shape) * 0.5
+y = 2 * X + 1 + noise
+
+# Plot the original data
+plt.scatter(X, y, color='red')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Generated Data for Linear Regression')
+plt.show()
+
+
 class Model(nn.Module):
     def __init__(self, in_features, out_features):
         super().__init__()
-        #Include your code here
+        self.linear = nn.Linear(in_features, out_features)
+
+    def forward(self, x):
+        return self.linear(x)
 
 
+class Model(nn.Module):
+    def __init__(self, in_features, out_features):
+        super().__init__()
+        self.linear = nn.Linear(in_features, out_features)
 
-# Initialize the Model, Loss Function, and Optimizer
+    def forward(self, x):
+        return self.linear(x)
+
+
+torch.manual_seed(59)  # Ensure same initial weights
+model = Model(1, 1)
+
+
+# Print Initial Weights and Bias
+initial_weight = model.linear.weight.item()
+initial_bias = model.linear.bias.item()
+print("\nName: Divya Sri")
+print("Register No: 24901155")
+print(f'Initial Weight: {initial_weight:.8f}, Initial Bias: {initial_bias:.8f}\n')
+
+loss_function = nn.MSELoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+
+
+# Train the Model
+epochs = 100
+losses = []
+
+for epoch in range(1, epochs + 1):  # Loop over epochs
+    
+    # 1. Forward pass (predictions)
+    y_pred = model(X)
+
+    # 2. Compute loss
+    loss = loss_function(y_pred, y)
+    losses.append(loss.item())
+
+    # 3. Zero gradients
+    optimizer.zero_grad()
+
+    # 4. Backpropagation
+    loss.backward()
+
+    # 5. Update parameters
+    optimizer.step()
+
+    # Print loss, weight, and bias for EVERY epoch
+    print(f'epoch: {epoch:2}  loss: {loss.item():10.8f}  '
+          f'weight: {model.linear.weight.item():10.8f}  '
+          f'bias: {model.linear.bias.item():10.8f}')
+
+    
+# Plot Loss Curve
+plt.plot(range(1, epochs + 1), losses)
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.title('Loss Curve')
+plt.show()
+
+
+# Final Weights & Bias
+final_weight = model.linear.weight.item()
+final_bias = model.linear.bias.item()
+print("\nName: Divya Sri")
+print("Register No: 24901155")
+print(f'\nFinal Weight: {final_weight:.8f}, Final Bias: {final_bias:.8f}')
+
+
+# Best-Fit Line Calculation
+x1 = torch.tensor([X.min().item(), X.max().item()])  # Min and max of X
+y1 = x1 * final_weight + final_bias  # Corresponding y-values using trained model
+
+
+# Plot Original Data & Best-Fit Line
+plt.scatter(X, y, label="Original Data")
+plt.plot(x1, y1, 'r', label="Best-Fit Line")
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Trained Model: Best-Fit Line')
+plt.legend()
+plt.show()
+
+# Prediction for x = 120
+x_new = torch.tensor([[120.0]])  # New input as a tensor
+y_new_pred = model(x_new).item()  # Predict using trained model
+print("\nName: Divya Sri")
+print("Register No: 24901155")
+print(f"\nPrediction for x = 120: {y_new_pred:.8f}")
+
 
 ```
+
 
 ### Dataset Information
 Include screenshot of the generated data
 
 ### OUTPUT
-Training Loss Vs Iteration Plot
-Best Fit line plot
-Include your plot here
-
+![alt text](<Screenshot 2026-02-03 102407.png>)
+![alt text](<Screenshot 2026-02-03 103414.png>)
+![alt text](<Screenshot 2026-02-03 103439.png>)
+![alt text](<Screenshot 2026-02-03 110138.png>)
 ### New Sample Data Prediction
 Include your sample input and output here
 
